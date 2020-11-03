@@ -46,12 +46,14 @@ class Sudoku extends Component {
                  console.log(event.keyCode - 48)
                  let row = this.state.selectedGrid.row_index;
                  let col = this.state.selectedGrid.col_index;
-                 
+                 let cnt = 0;
                  if(event.keyCode <= 57){
                     let tmp = this.state.gridValues.slice();
                     let inval = 0;
                     let ipval = event.keyCode - 48;
+                    
                     for(var i = 0; i < 9; i++){
+                        //console.log(tmp[row][i])
                         if(tmp[row][i] != '0' && ((i != row && tmp[row][i] == ipval))){
                             inval = 1;
                             confs.push({row_index : row, col_index: i})
@@ -60,7 +62,7 @@ class Sudoku extends Component {
                             })
                             setTimeout(() => { this.setState({ conflicts : [], }); }, 1000);
                         }
-                        else if((tmp[row][i] != '0' && i != col && tmp[i][col] == ipval)){
+                        else if((tmp[i][col] != '0' && i != col && tmp[i][col] == ipval)){
                             inval = 1;
                             //let confs = this.state.conflicts.slice();
                             confs.push({row_index:i, col_index:col})
@@ -75,7 +77,7 @@ class Sudoku extends Component {
                     console.log(br, bc);
                     for(var i = br * 3; i < br * 3 + 3; i++){
                         for(var j = bc * 3; j < bc * 3 + 3; j++){
-                            if((i != row || j != col) && tmp[i][j] == ipval){
+                            if((i != row || j != col) && tmp[i][j] == ipval && inval != '0'){
                                 inval = 1;
                                 if(i != row && j != col){
                                     //let confs = this.state.conflicts.slice();
@@ -99,6 +101,17 @@ class Sudoku extends Component {
                         this.setState({ gameBoardBorderStyle: "8px solid #E77" });
                         setTimeout(() => { this.setState({ gameBoardBorderStyle: "8px solid #333"  }); }, 1000);
                     }
+                    for(var i = 0; i < 9; i++){
+                        for(var j = 0; j < 9; j++){
+                            if(tmp[i][j] != '0'){
+                                cnt += 1;
+                            }
+                        }
+                    }
+                    if(cnt == 81){
+                        this.setState({ completeFlag: true });
+                        setTimeout(() => { this.setState({ completeFlag: false }); }, 2500);
+                    }
                     console.log('wow', confs)
                 }
                 else{
@@ -109,13 +122,14 @@ class Sudoku extends Component {
                     })
                 }
              }
-        if (this.state.problem.content[this.state.selectedGrid.row_index][this.state.selectedGrid.col_index] === "0") {}
+        //if (this.state.problem.content[this.state.selectedGrid.row_index][this.state.selectedGrid.col_index] === "0") {}
     }
 
     handleScreenKeyboardInput = (num) => {
         /*this.setState({
             conflicts : [],
         })*/
+        console.log(num)
         let confs = []
         if (this.state.problem.content[this.state.selectedGrid.row_index][this.state.selectedGrid.col_index] !== "0") {
 
@@ -125,7 +139,8 @@ class Sudoku extends Component {
             let col = this.state.selectedGrid.col_index;
             let tmp = this.state.gridValues.slice();
             let inval = 0;
-            let ipval = num
+            let ipval = num;
+            let cnt = 0;
             for(var i = 0; i < 9; i++){
                 if(tmp[row][i] != '0' && ((i != row && tmp[row][i] == ipval))){
                     inval = 1;
@@ -136,7 +151,7 @@ class Sudoku extends Component {
                     })
                     setTimeout(() => { this.setState({ conflicts : [], }); }, 1000);
                 }
-                else if((tmp[row][i] != '0' && i != col && tmp[i][col] == ipval)){
+                else if((tmp[i][col] != '0' && i != col && tmp[i][col] == ipval)){
                     inval = 1;
                     //let confs = this.state.conflicts.slice();
                     confs.push({row_index: i, col_index: col})
@@ -151,7 +166,7 @@ class Sudoku extends Component {
             console.log(br, bc);
             for(var i = br * 3; i < br * 3 + 3; i++){
                 for(var j = bc * 3; j < bc * 3 + 3; j++){
-                    if((i != row || j != col) && tmp[i][j] == ipval){
+                    if((i != row || j != col) && tmp[i][j] == ipval && num != 0){
                         inval = 1;
                         if(i != row && j != col){
                             //let confs = this.state.conflicts.slice();
@@ -173,6 +188,17 @@ class Sudoku extends Component {
             else{
                 this.setState({ gameBoardBorderStyle: "8px solid #E77" });
                 setTimeout(() => { this.setState({ gameBoardBorderStyle: "8px solid #333" }); }, 1000);
+            }
+            for(var i = 0; i < 9; i++){
+                for(var j = 0; j < 9; j++){
+                    if(tmp[i][j] != '0'){
+                        cnt += 1;
+                    }
+                }
+            }
+            if(cnt == 81){
+                this.setState({ completeFlag: true });
+                setTimeout(() => { this.setState({ completeFlag: false }); }, 2500);
             }
         }
     }
