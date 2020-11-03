@@ -24,23 +24,156 @@ class Sudoku extends Component {
 
     handle_grid_1x1_click = (row_index, col_index) => {
         // TODO
-
+        
         // Useful hints:
-        // console.log(row_index, col_index)
-        // console.log(this.state.selectedGrid)
+        console.log(this.state.gridValues[row_index][col_index]);
+        this.setState({
+            selectedGrid : {row_index, col_index}
+        })
+        console.log(this.state.selectedGrid)
     }
 
     handleKeyDownEvent = (event) => {
         // TODO
-
         // Useful hints:
-        // console.log(event)
-        // if (this.state.gridValues !== null && this.state.selectedGrid.row_index !== -1 && this.state.selectedGrid.col_index !== -1 && (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {}
-        // if (this.state.problem.content[this.state.selectedGrid.row_index][this.state.selectedGrid.col_index] === "0") {}
+        let confs = []
+        console.log(event)
+        if (this.state.problem.content[this.state.selectedGrid.row_index][this.state.selectedGrid.col_index] !== "0") {
+
+        }
+        else if (this.state.gridValues !== null && this.state.selectedGrid.row_index !== -1 && this.state.selectedGrid.col_index !== -1
+             && (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {
+                 console.log(event.keyCode - 48)
+                 let row = this.state.selectedGrid.row_index;
+                 let col = this.state.selectedGrid.col_index;
+                 
+                 if(event.keyCode <= 57){
+                    let tmp = this.state.gridValues.slice();
+                    let inval = 0;
+                    let ipval = event.keyCode - 48;
+                    for(var i = 0; i < 9; i++){
+                        if(tmp[row][i] != '0' && ((i != row && tmp[row][i] == ipval))){
+                            inval = 1;
+                            confs.push({row_index : row, col_index: i})
+                            this.setState({
+                                conflicts : confs,
+                            })
+                            setTimeout(() => { this.setState({ conflicts : [], }); }, 1000);
+                        }
+                        else if((tmp[row][i] != '0' && i != col && tmp[i][col] == ipval)){
+                            inval = 1;
+                            //let confs = this.state.conflicts.slice();
+                            confs.push({row_index:i, col_index:col})
+                            this.setState({
+                                conflicts : confs,
+                            })
+                            setTimeout(() => { this.setState({ conflicts : [], }); }, 1000);
+                        }
+                    }
+                    let br = (row - (row % 3)) / 3;
+                    let bc = (col - (col % 3)) / 3;
+                    console.log(br, bc);
+                    for(var i = br * 3; i < br * 3 + 3; i++){
+                        for(var j = bc * 3; j < bc * 3 + 3; j++){
+                            if((i != row || j != col) && tmp[i][j] == ipval){
+                                inval = 1;
+                                if(i != row && j != col){
+                                    //let confs = this.state.conflicts.slice();
+                                    confs.push({row_index: i, col_index: j})
+                                    this.setState({
+                                        conflicts : confs,
+                                    })
+                                    setTimeout(() => { this.setState({ conflicts : [], }); }, 1000);
+                                }
+                            }
+                        }
+                    }
+                    if(!inval){
+                        tmp[row][col] = String(event.keyCode - 48);
+                        this.setState({
+                            gridValues : tmp,
+                        })
+                    }
+                    else{
+                        this.setState({ gameBoardBorderStyle: "8px solid #E77" });
+                        setTimeout(() => { this.setState({ gameBordBoarderStyle: "8px solid #333" }); }, 1000);
+                    }
+                    console.log('wow', confs)
+                }
+                else{
+                    let tmp = this.state.gridValues.slice();
+                    tmp[row][col] = String(event.keyCode - 96);
+                    this.setState({
+                        gridValues : tmp,
+                    })
+                }
+             }
+        if (this.state.problem.content[this.state.selectedGrid.row_index][this.state.selectedGrid.col_index] === "0") {}
     }
 
     handleScreenKeyboardInput = (num) => {
-        // TODO
+        /*this.setState({
+            conflicts : [],
+        })*/
+        let confs = []
+        if (this.state.problem.content[this.state.selectedGrid.row_index][this.state.selectedGrid.col_index] !== "0") {
+
+        }
+        else if (this.state.gridValues !== null && this.state.selectedGrid.row_index !== -1 && this.state.selectedGrid.col_index !== -1){
+            let row = this.state.selectedGrid.row_index;
+            let col = this.state.selectedGrid.col_index;
+            let tmp = this.state.gridValues.slice();
+            let inval = 0;
+            let ipval = num
+            for(var i = 0; i < 9; i++){
+                if(tmp[row][i] != '0' && ((i != row && tmp[row][i] == ipval))){
+                    inval = 1;
+                    //let confs = this.state.conflicts.slice();
+                    confs.push({row_index : row, col_index: i})
+                    this.setState({
+                        conflicts : confs,
+                    })
+                    setTimeout(() => { this.setState({ conflicts : [], }); }, 1000);
+                }
+                else if((tmp[row][i] != '0' && i != col && tmp[i][col] == ipval)){
+                    inval = 1;
+                    //let confs = this.state.conflicts.slice();
+                    confs.push({row_index: i, col_index: col})
+                    this.setState({
+                        conflicts : confs,
+                    })
+                    setTimeout(() => { this.setState({ conflicts : [], }); }, 1000);
+                }
+            }
+            let br = (row - (row % 3)) / 3;
+            let bc = (col - (col % 3)) / 3;
+            console.log(br, bc);
+            for(var i = br * 3; i < br * 3 + 3; i++){
+                for(var j = bc * 3; j < bc * 3 + 3; j++){
+                    if((i != row || j != col) && tmp[i][j] == ipval){
+                        inval = 1;
+                        if(i != row && j != col){
+                            //let confs = this.state.conflicts.slice();
+                            confs.push({row_index: i, col_index:j})
+                            this.setState({
+                                conflicts : confs,
+                            })
+                            setTimeout(() => { this.setState({ conflicts : [], }); }, 1000);
+                        }
+                    }
+                }
+            }
+            if(!inval){
+                tmp[row][col] = String(num);
+                this.setState({
+                    gridValues : tmp,
+                })
+            }
+            else{
+                this.setState({ gameBoardBorderStyle: "8px solid #E77" });
+                setTimeout(() => { this.setState({ gameBordBoarderStyle: "8px solid #333" }); }, 1000);
+            }
+        }
     }
 
     componentDidMount = () => {
