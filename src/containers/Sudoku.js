@@ -93,10 +93,11 @@ class Sudoku extends Component {
                         this.setState({
                             gridValues : tmp,
                         })
+                        //this.setState({ gameBordBoarderStyle: "8px solid #333" })
                     }
                     else{
                         this.setState({ gameBoardBorderStyle: "8px solid #E77" });
-                        setTimeout(() => { this.setState({ gameBordBoarderStyle: "8px solid #333" }); }, 1000);
+                        setTimeout(() => { this.setState({ gameBoardBorderStyle: "8px solid #333"  }); }, 1000);
                     }
                     console.log('wow', confs)
                 }
@@ -171,7 +172,7 @@ class Sudoku extends Component {
             }
             else{
                 this.setState({ gameBoardBorderStyle: "8px solid #E77" });
-                setTimeout(() => { this.setState({ gameBordBoarderStyle: "8px solid #333" }); }, 1000);
+                setTimeout(() => { this.setState({ gameBoardBorderStyle: "8px solid #333" }); }, 1000);
             }
         }
     }
