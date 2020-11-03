@@ -53,8 +53,8 @@ class Sudoku extends Component {
                     let ipval = event.keyCode - 48;
                     
                     for(var i = 0; i < 9; i++){
-                        //console.log(tmp[row][i])
-                        if(tmp[row][i] != '0' && ((i != row && tmp[row][i] == ipval))){
+                        console.log(tmp[row][i])
+                        if(tmp[row][i] != '0' && ((i != col && tmp[row][i] == ipval))){
                             inval = 1;
                             confs.push({row_index : row, col_index: i})
                             this.setState({
@@ -62,7 +62,7 @@ class Sudoku extends Component {
                             })
                             setTimeout(() => { this.setState({ conflicts : [], }); }, 1000);
                         }
-                        else if((tmp[i][col] != '0' && i != col && tmp[i][col] == ipval)){
+                        else if((tmp[i][col] != '0' && i != row && tmp[i][col] == ipval)){
                             inval = 1;
                             //let confs = this.state.conflicts.slice();
                             confs.push({row_index:i, col_index:col})
@@ -142,7 +142,7 @@ class Sudoku extends Component {
             let ipval = num;
             let cnt = 0;
             for(var i = 0; i < 9; i++){
-                if(tmp[row][i] != '0' && ((i != row && tmp[row][i] == ipval))){
+                if(tmp[row][i] != '0' && ((i != col && tmp[row][i] == ipval))){
                     inval = 1;
                     //let confs = this.state.conflicts.slice();
                     confs.push({row_index : row, col_index: i})
@@ -151,7 +151,7 @@ class Sudoku extends Component {
                     })
                     setTimeout(() => { this.setState({ conflicts : [], }); }, 1000);
                 }
-                else if((tmp[i][col] != '0' && i != col && tmp[i][col] == ipval)){
+                else if((tmp[i][col] != '0' && i != row && tmp[i][col] == ipval)){
                     inval = 1;
                     //let confs = this.state.conflicts.slice();
                     confs.push({row_index: i, col_index: col})
